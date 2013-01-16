@@ -86,7 +86,7 @@ cl_kernel loadKernel(const cl_context context, const cl_device_id device, const 
 	std::string source = readFile(kernel_file);
 
 	const char *source_ptr = source.data();
-	const unsigned int length = source.size();
+	const size_t length = source.size();
 
 	cl_program program = clCreateProgramWithSource(context, 1, (const char**) &source_ptr, &length, &error);
 	if(error) {
@@ -97,7 +97,7 @@ cl_kernel loadKernel(const cl_context context, const cl_device_id device, const 
 	error = clBuildProgram(program, 1, &device, build_options, NULL, NULL);
 	if(error) {
 		char *build_log;
-		unsigned int log_length;
+		size_t log_length;
 		std::cerr << "Error building program: " << error << std::endl;
 		clGetProgramBuildInfo(program, device, CL_PROGRAM_BUILD_LOG, 0, NULL, &log_length);
 		build_log = new char[log_length];

@@ -11,24 +11,6 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
-std::string loadFile(const char *filePath);
-
-/*
- * Platform --.---------.----------------.
- *            |         |                |
- *            ¡         ¡                ¡
- *            Device    Device    ...    Device ----.
- *                     [_______________________]    |
- *                                 |                |--> Queue
- *                                 ¡                |
- *                              Context ------------'
- *
- */
-
-const char *getDeviceName(cl_device_id device);
-
-cl_device_id *getDevices(cl_device_type type);
-
 std::string readFile(const char *file_path);
 
 GLuint loadShader(const char *vertexFile, const char *fragmentFile);

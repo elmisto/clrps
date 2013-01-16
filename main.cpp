@@ -7,20 +7,8 @@
 #include <iostream>
 #include <sstream>
 
-#if defined _WIN32
-	#include <windows.h>
-#elif defined __linux__
-	#include <GL/glx.h>
-#endif
-
 #include <ctime>
 #include <cmath>
-
-// OpenCL libraries
-#define __NO_STD_VECTOR // Use cl::vector instead of STL version
-#include <CL/cl.h>
-#define CL_USE_DEPRECATED_OPENCL_1_1_APIS
-#include <CL/cl_gl.h>
 
 // OpenGL libraries
 #include <GL/glew.h>
@@ -28,9 +16,21 @@
 #define GLFW_INCLUDE_GL3
 #include <GL/glfw.h>
 
+#if defined _WIN32
+	#include <windows.h>
+#elif defined __linux__
+	#include <GL/glx.h>
+#endif
+
 // GL math libraries
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+
+// OpenCL libraries
+#define __NO_STD_VECTOR // Use cl::vector instead of STL version
+#include <CL/cl.h>
+#define CL_USE_DEPRECATED_OPENCL_1_1_APIS
+#include <CL/cl_gl.h>
 
 // Utility library
 #include "utils.hpp"
@@ -42,6 +42,8 @@
 #define CELL		8
 
 #define FPS			120
+
+namespace clrps {
 
 // Static data
 static const GLfloat g_vertex_buffer_data[] = {
@@ -99,6 +101,10 @@ cl_mem 				universe_buffer, update_buffer, random_buffer;
 cl_mem				buffers[] = {universe_buffer, update_buffer};
 
 cl_sampler			sampler;
+
+}
+
+using namespace clrps;
 
 /*
  * Generate initial random seed for OpenCL
@@ -186,7 +192,7 @@ void GLFWCALL key_handler(int key, int action) {
 			exit_handler(0);
 			break;
 		case GLFW_KEY_SPACE:
-			pause = !pause;
+			clrps::pause = !clrps::pause;
 			break;
 		}
 	}
@@ -555,7 +561,7 @@ int main() {
     	frame++;
 
     	// Update
-    	if(!pause) {
+    	if(!clrps::pause) {
     		clEnqueueAcquireGLObjects(queue, 2, buffers, 0, NULL, NULL);
 
     		clSetKernelArg(kernel, 0, sizeof(cl_mem), &universe_buffer);
